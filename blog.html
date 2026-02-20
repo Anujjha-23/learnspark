@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Blog – LearnSpark</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f; --surface: #111118; --card: #16161f;
+      --accent: #f0c040; --accent2: #e05aff;
+      --text: #f0eeea; --muted: #8884a0; --border: rgba(240,192,64,0.15);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; }
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(10,10,15,0.85); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.5rem; color: var(--accent); text-decoration: none; }
+    .logo span { color: var(--accent2); }
+    nav ul { display: flex; gap: 2.5rem; list-style: none; }
+    nav ul a { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+    nav ul a:hover, nav ul a.active { color: var(--text); }
+    .nav-cta { background: var(--accent); color: #0a0a0f; padding: 0.55rem 1.4rem; border-radius: 6px; font-weight: 700; font-size: 0.85rem; text-decoration: none; }
+
+    .page-header { padding: 9rem 4rem 4rem; border-bottom: 1px solid var(--border); }
+    .section-tag { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px; color: var(--accent); font-weight: 600; margin-bottom: 1rem; }
+    h1 { font-family: 'Syne', sans-serif; font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; letter-spacing: -2px; }
+    h1 em { font-style: normal; color: var(--accent2); }
+
+    /* FEATURED POST */
+    .featured { padding: 4rem; }
+    .featured-card {
+      background: var(--card); border-radius: 20px; border: 1px solid var(--border);
+      overflow: hidden; display: grid; grid-template-columns: 1fr 1fr;
+      transition: transform 0.3s;
+    }
+    .featured-card:hover { transform: translateY(-4px); }
+    .featured-thumb {
+      min-height: 300px; display: flex; align-items: center; justify-content: center;
+      font-size: 6rem;
+      background: linear-gradient(135deg, #1a0a2e, #0a0a2e);
+    }
+    .featured-body { padding: 3rem; display: flex; flex-direction: column; justify-content: center; }
+    .post-tag { display: inline-block; background: rgba(240,192,64,0.1); color: var(--accent); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; padding: 4px 12px; border-radius: 100px; margin-bottom: 1rem; }
+    .featured-body h2 { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px; line-height: 1.25; margin-bottom: 1rem; }
+    .featured-body p { color: var(--muted); line-height: 1.7; margin-bottom: 1.5rem; }
+    .post-meta { display: flex; gap: 1.5rem; color: var(--muted); font-size: 0.8rem; margin-bottom: 1.5rem; }
+    .read-more { color: var(--accent); font-weight: 600; font-size: 0.9rem; text-decoration: none; border-bottom: 1px solid var(--accent); padding-bottom: 2px; }
+
+    /* POSTS GRID */
+    .posts-section { padding: 0 4rem 6rem; }
+    .posts-section h2 { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 2rem; }
+    .posts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.8rem; }
+    .post-card {
+      background: var(--card); border-radius: 16px; border: 1px solid var(--border);
+      overflow: hidden; transition: transform 0.3s;
+    }
+    .post-card:hover { transform: translateY(-5px); }
+    .post-thumb {
+      height: 160px; display: flex; align-items: center; justify-content: center;
+      font-size: 3.5rem;
+    }
+    .post-body { padding: 1.5rem; }
+    .post-body h3 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; line-height: 1.4; margin: 0.5rem 0; }
+    .post-body p { color: var(--muted); font-size: 0.85rem; line-height: 1.6; }
+    .post-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 1.2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+    .post-date { color: var(--muted); font-size: 0.75rem; }
+    .post-link { color: var(--accent); font-size: 0.8rem; font-weight: 600; text-decoration: none; }
+
+    footer { background: var(--surface); border-top: 1px solid var(--border); padding: 3rem 4rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    footer p { color: var(--muted); font-size: 0.85rem; }
+    footer nav { display: flex; gap: 2rem; }
+    footer nav a { color: var(--muted); text-decoration: none; font-size: 0.85rem; }
+    footer nav a:hover { color: var(--text); }
+
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      nav ul { display: none; }
+      .page-header, .featured, .posts-section { padding: 6rem 1.5rem 3rem; }
+      .featured-card { grid-template-columns: 1fr; }
+      footer { padding: 2rem 1.5rem; flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">Learn<span>Spark</span></a>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="courses.html">Courses</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="blog.html" class="active">Blog</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <a href="signup.html" class="nav-cta">Get Started</a>
+</nav>
+
+<div class="page-header">
+  <div class="section-tag">LearnSpark Blog</div>
+  <h1>Insights, Tutorials &<br><em>Career Tips</em></h1>
+</div>
+
+<section class="featured">
+  <div class="featured-card">
+    <div class="featured-thumb">🚀</div>
+    <div class="featured-body">
+      <span class="post-tag">Featured</span>
+      <h2>The Complete Roadmap to Becoming a Full-Stack Developer in 2024</h2>
+      <div class="post-meta"><span>📅 Dec 10, 2024</span><span>⏱ 12 min read</span><span>By Sarah Chen</span></div>
+      <p>A step-by-step guide covering everything from HTML basics to deploying production-grade applications — with curated resources at every stage.</p>
+      <a href="#" class="read-more">Read Article →</a>
+    </div>
+  </div>
+</section>
+
+<section class="posts-section">
+  <h2>Latest Articles</h2>
+  <div class="posts-grid">
+
+    <div class="post-card">
+      <div class="post-thumb" style="background:linear-gradient(135deg,#0a2e1a,#0a0a2e);">🤖</div>
+      <div class="post-body">
+        <span class="post-tag">AI & ML</span>
+        <h3>How AI is Reshaping the Tech Job Market in 2024</h3>
+        <p>What skills will remain valuable, which roles are evolving, and how to future-proof your career.</p>
+        <div class="post-footer"><span class="post-date">Dec 8, 2024</span><a href="#" class="post-link">Read →</a></div>
+      </div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-thumb" style="background:linear-gradient(135deg,#2d1b3e,#1a0a2e);">🎨</div>
+      <div class="post-body">
+        <span class="post-tag">Design</span>
+        <h3>10 UI/UX Principles Every Developer Should Know</h3>
+        <p>Great code deserves great design. These principles will make your apps stand out.</p>
+        <div class="post-footer"><span class="post-date">Dec 5, 2024</span><a href="#" class="post-link">Read →</a></div>
+      </div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-thumb" style="background:linear-gradient(135deg,#2e1a0a,#1a2e0a);">💼</div>
+      <div class="post-body">
+        <span class="post-tag">Career</span>
+        <h3>How to Land Your First Developer Job With No Experience</h3>
+        <p>Practical strategies for building a portfolio, networking effectively, and acing interviews.</p>
+        <div class="post-footer"><span class="post-date">Dec 3, 2024</span><a href="#" class="post-link">Read →</a></div>
+      </div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-thumb" style="background:linear-gradient(135deg,#0a0a2e,#2e0a0a);">⚛️</div>
+      <div class="post-body">
+        <span class="post-tag">Web Dev</span>
+        <h3>React vs Vue vs Angular in 2024: Which Should You Learn?</h3>
+        <p>An honest comparison to help you pick the right frontend framework for your goals.</p>
+        <div class="post-footer"><span class="post-date">Nov 29, 2024</span><a href="#" class="post-link">Read →</a></div>
+      </div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-thumb" style="background:linear-gradient(135deg,#0a2e2e,#2e0a2e);">📊</div>
+      <div class="post-body">
+        <span class="post-tag">Data Science</span>
+        <h3>5 Python Libraries Every Data Scientist Must Master</h3>
+        <p>From data wrangling to visualization — these are the tools that pros use daily.</p>
+        <div class="post-footer"><span class="post-date">Nov 25, 2024</span><a href="#" class="post-link">Read →</a></div>
+      </div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-thumb" style="background:linear-gradient(135deg,#1a2e0a,#0a1a2e);">🧠</div>
+      <div class="post-body">
+        <span class="post-tag">Learning</span>
+        <h3>The Science of Effective Learning: Techniques That Actually Work</h3>
+        <p>Spaced repetition, active recall, and other evidence-backed methods to learn faster.</p>
+        <div class="post-footer"><span class="post-date">Nov 20, 2024</span><a href="#" class="post-link">Read →</a></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <p>© 2024 LearnSpark. All rights reserved.</p>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="courses.html">Courses</a>
+    <a href="about.html">About</a>
+    <a href="blog.html">Blog</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</footer>
+
+</body>
+</html>
